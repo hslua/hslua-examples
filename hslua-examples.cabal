@@ -1,0 +1,55 @@
+name:                   hslua-examples
+version:                0.1.0
+stability:              beta
+cabal-version:          >= 1.8
+license:                MIT
+build-type:             Simple
+license-File:           COPYRIGHT
+copyright:              © 2007–2012 Gracjan Polak
+                        © 2012–2016 Ömer Sinan Ağacan
+                        © 2016–2017 Albert Krewinkel
+author:                 Gracjan Polak, Ömer Sinan Ağacan
+maintainer:             Albert Krewinkel <albert+hslua@zeitkraut.de>
+synopsis:               Examples of using haskell and lua together.
+description:            The Foreign.Lua module is a wrapper of Lua language interpreter
+                        as described in [lua.org](http://www.lua.org/).
+                        .
+                        This package contains example programs, demonstrating
+                        the possibility to work with lua from within haskell and
+                        vice versa.
+category:               Foreign
+extra-source-files:     README.md
+                        CHANGELOG.md
+                        COPYRIGHT
+                        examples/callbacks/callbacks.lua
+                        examples/haskellfun/haskellfun.lua
+                        examples/err_prop/err_prop.lua
+
+source-repository head
+  type:                 git
+  location:             https://github.com/tarleb/hslua-examples.git
+
+executable lua-version
+  main-is:              lua-version.hs
+  hs-source-dirs:       examples/lua-version
+  build-depends:        base
+                      , hslua >= 0.6 && < 1
+
+executable callbacks
+  main-is:              callbacks.hs
+  hs-source-dirs:       examples/callbacks
+  build-depends:        base
+                      , bytestring
+                      , hslua >= 0.6 && < 1
+
+executable haskellfun
+  main-is:              haskellfun.hs
+  hs-source-dirs:       examples/haskellfun
+  build-depends:        base, bytestring
+                      , hslua >= 0.6 && < 1
+
+executable err_prop
+  main-is:              err_prop.hs
+  hs-source-dirs:       examples/err_prop
+  build-depends:        base, bytestring
+                      , hslua >= 0.6 && < 1
