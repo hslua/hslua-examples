@@ -19,11 +19,11 @@ main = runLua $ do
   loadfile "examples/haskellfun/haskellfun.lua"
   call 0 0
 
-concat' :: B.ByteString -> B.ByteString -> IO B.ByteString
+concat' :: B.ByteString -> B.ByteString -> Lua B.ByteString
 concat' s1 s2 = return $ s1 <> s2
 
-pow :: Double -> Double -> IO Double
+pow :: Double -> Double -> Lua Double
 pow d1 d2 = return $ d1 ** d2
 
-helloWorld :: IO B.ByteString
+helloWorld :: Lua B.ByteString
 helloWorld = return "Hello, World!"

@@ -39,7 +39,7 @@ main = runLua $ do
   pushinteger 10
   -- Since Lua function will be the one that propagates error to the program,
   -- we need to catch it using `pcall`
-  ret <- pcall 1 1 0
+  ret <- pcall 1 1 Nothing
   errMsg <- tostring 1
   liftIO $ putStrLn $ "ret: " ++ show ret -- TODO: Implement pcall return values as a type
   liftIO $ putStrLn $ "errMsg: " ++ BC.unpack errMsg
@@ -71,8 +71,8 @@ failWhenZero l = runLuaWith l $ do
     else do
       getglobal "fail_when_zero"
       pushinteger (i - 1)
-      ret <- pcall 1 1 0
-      if ret /= 0
+      ret <- pcall 1 1 Nothing
+      if ret /= LuaOK
         then
           -- propagate the error. no need to push error message since it's
           -- already at the top of the stack at this point. (because of how
