@@ -1,0 +1,7 @@
+flags: {}
+packages:
+  - '.'
+extra-deps:
+  - hslua-0.6.0
+resolver: lts-9.0
+
