@@ -13,9 +13,9 @@ main = do
   callbacks <- newIORef []
   runLua $ do
     openlibs
-    registerrawhsfunction "addLuaCallbacks" (addLuaCallbacks callbacks)
-    registerrawhsfunction "callLuaCallbacks" (callLuaCallbacks callbacks)
-    registerrawhsfunction "resetLuaCallbacks" (resetLuaCallbacks callbacks)
+    registerHaskellFunction "addLuaCallbacks" (addLuaCallbacks callbacks)
+    registerHaskellFunction "callLuaCallbacks" (callLuaCallbacks callbacks)
+    registerHaskellFunction "resetLuaCallbacks" (resetLuaCallbacks callbacks)
     loadfile "examples/callbacks/callbacks.lua"
     call 0 0
 
@@ -25,8 +25,8 @@ type LuaFunRef = Int
 -- Successive calls to this function without calling `resetLuaCallbacks`
 -- adds more callbacks to the queue.
 -- (I know lists are not the best functional queue implementations ...)
-addLuaCallbacks :: IORef [LuaFunRef] -> LuaState -> IO CInt
-addLuaCallbacks cs l = runLuaWith l $ do
+addLuaCallbacks :: IORef [LuaFunRef] -> Lua NumResults
+addLuaCallbacks cs = do
     -- number of arguments passed to this function
     args <- gettop
     -- make sure arguments are functions
@@ -68,15 +68,14 @@ addLuaCallbacks cs l = runLuaWith l $ do
           addCallbacks (n+1) max
 
 -- | Call Lua callbacks collected with `addLuaCallbacks`.
-callLuaCallbacks :: IORef [LuaFunRef] -> LuaState -> IO CInt
-callLuaCallbacks cs l = do
-  cs' <- readIORef cs
-  runLuaWith l $ do
-    -- push new array to the stack
-    createtable (length cs') 0
-    -- call callbacks and fill array with return values
-    iter cs'
-    return 1
+callLuaCallbacks :: IORef [LuaFunRef] -> Lua NumResults
+callLuaCallbacks cs = do
+  cs' <- liftIO $ readIORef cs
+  -- push new array to the stack
+  createtable (length cs') 0
+  -- call callbacks and fill array with return values
+  iter cs'
+  return 1
  where
   iter [] = return ()
   iter (c : rest) = do
@@ -92,9 +91,9 @@ callLuaCallbacks cs l = do
 
 -- | Reset callback queue and remove Lua functions from registry to enable
 -- garbage collection.
-resetLuaCallbacks :: IORef [LuaFunRef] -> LuaState -> IO CInt
-resetLuaCallbacks cs l = do
-  cs' <- readIORef cs
-  runLuaWith l $ mapM_ (unref registryindex) cs'
-  writeIORef cs []
+resetLuaCallbacks :: IORef [LuaFunRef] -> Lua NumResults
+resetLuaCallbacks cs = do
+  cs' <- liftIO (readIORef cs)
+  mapM_ (unref registryindex) cs'
+  liftIO $ writeIORef cs []
   return 0

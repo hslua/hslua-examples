@@ -28,7 +28,7 @@ import Foreign.Lua
 main :: IO ()
 main = runLua $ do
   openlibs
-  registerrawhsfunction "fail_when_zero_haskell" failWhenZero
+  registerHaskellFunction "fail_when_zero_haskell" failWhenZero
 
   -- Define the Lua function
   loadfile "examples/err_prop/err_prop.lua"
@@ -62,8 +62,8 @@ main = runLua $ do
   liftIO $ putStrLn $ "errMsg: " ++ BC.unpack errMsg
   pop 2
 
-failWhenZero :: LuaState -> IO CInt
-failWhenZero l = runLuaWith l $ do
+failWhenZero :: Lua NumResults
+failWhenZero = do
   i <- tointeger 1
   liftIO $ putStrLn $ "Haskell: " ++ show i
   if i == 0

@@ -13,9 +13,9 @@ import Foreign.Lua as Lua
 main :: IO ()
 main = runLua $ do
   openlibs
-  registerhsfunction "concat" concat'
-  registerhsfunction "pow" pow
-  registerhsfunction "helloWorld" helloWorld
+  registerHaskellFunction "concat" concat'
+  registerHaskellFunction "pow" pow
+  registerHaskellFunction "helloWorld" helloWorld
   loadfile "examples/haskellfun/haskellfun.lua"
   call 0 0
 
