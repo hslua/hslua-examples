@@ -1,0 +1,33 @@
+sudo: false
+language: generic
+
+# Speed builds up by caching install requirements
+cache:
+  directories:
+  - $HOME/.stack
+
+matrix:
+  include:
+    # Default test
+    - env: BUILD=stack
+      compiler: ": #stack 8.0.2"
+      addons: {apt: {packages: [ghc-8.0.2], sources: [hvr-ghc]}}
+  # mark build as successful as soon as all required successes are in.
+  fast_finish: true
+
+before_install:
+  - export PATH=/opt/ghc/$GHCVER/bin:/opt/cabal/$CABALVER/bin:$PATH
+# Download and unpack the stack executable
+  - mkdir -p ~/.local/bin
+  - curl -L https://www.stackage.org/stack/linux-x86_64 | tar xz --wildcards --strip-components=1 -C ~/.local/bin '*/stack'
+
+install:
+  - echo "$(ghc --version) [$(ghc --print-project-git-commit-id 2> /dev/null || echo '?')]"
+  - ulimit -n 4096
+  - stack --no-terminal --install-ghc build
+
+script:
+  - stack exec lua-version
+  - stack exec callbacks
+  - stack exec haskellfun
+  - stack exec err_prop
