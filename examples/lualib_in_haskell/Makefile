@@ -1,10 +1,11 @@
 ALL: libarith.so lualibhelper.so
 
 libarith.so: LibArith.hs
-	ghc $^ -o $@ -shared -fPIC -dynamic -lHSrts-ghc7.10.1
+	stack ghc -- $^ -o $@ -shared -fPIC -dynamic -lHSrts-ghc8.0.2
 
 lualibhelper.so: libarith.so libarithhelper.c
-	ghc libarithhelper.c -no-hs-main -o $@ -shared -fPIC -dynamic -lHSrts-ghc7.10.1 -L. -larith -I../../lua-5.1.5
+	stack ghc -- libarithhelper.c -no-hs-main -o $@ -shared -fPIC -dynamic \
+		-L. -larith -I/usr/include/lua5.1
 
 clean:
 	rm -f *.hi
