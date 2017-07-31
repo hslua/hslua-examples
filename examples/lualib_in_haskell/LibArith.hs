@@ -1,19 +1,14 @@
-{-# LANGUAGE ScopedTypeVariables #-}
-
 module LibArith where
 
-import Data.Maybe
-import Foreign.C.Types
-
+import Foreign.C.Types (CInt(CInt))
 import Foreign.Lua
-import Foreign.Lua.Raw
 
 foreign export ccall
-  add :: LuaState -> IO CInt
+  add :: LuaState -> IO NumResults
 
-add :: LuaState -> IO CInt
-add l = do
-  i1 :: LuaNumber <- fromJust `fmap` peek l 1
-  i2 :: LuaNumber <- fromJust `fmap` peek l 2
-  push l (i1 + i2 :: LuaNumber)
+add :: LuaState -> IO NumResults
+add l = runLuaWith l $ do
+  i1 <- peek 1
+  i2 <- peek 2
+  push (i1 + i2 :: LuaNumber)
   return 1
