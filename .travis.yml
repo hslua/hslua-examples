@@ -6,14 +6,15 @@ cache:
   directories:
   - $HOME/.stack
 
-matrix:
-  include:
-    # Default test
-    - env: BUILD=stack
-      compiler: ": #stack 8.0.2"
-      addons: {apt: {packages: [ghc-8.0.2], sources: [hvr-ghc]}}
-  # mark build as successful as soon as all required successes are in.
-  fast_finish: true
+addons:
+  apt:
+    packages:
+      - lua5.1
+      - liblua5.1-0
+      - liblua5.1-0-dev
+      - ghc-8.0.2
+    sources:
+      - hvr-ghc
 
 before_install:
   - export PATH=/opt/ghc/$GHCVER/bin:/opt/cabal/$CABALVER/bin:$PATH
@@ -24,10 +25,11 @@ before_install:
 install:
   - echo "$(ghc --version) [$(ghc --print-project-git-commit-id 2> /dev/null || echo '?')]"
   - ulimit -n 4096
-  - stack --no-terminal --install-ghc build
+  - stack --no-terminal --install-ghc build --flag hslua:lua501 --flag hslua:use-pkgconfig
 
 script:
   - stack exec lua-version
   - stack exec callbacks
   - stack exec haskellfun
   - stack exec err_prop
+  - (cd examples/lualib_in_haskell && make clean && make && LD_LIBRARY_PATH=. lua main.lua)
