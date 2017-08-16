@@ -50,7 +50,7 @@ addLuaCallbacks cs = do
     checkArgs 0 = return Nothing
     checkArgs n = do
       ty <- ltype n
-      if ty == TFUNCTION
+      if ty == TypeFunction
         then checkArgs (n-1)
         else return $ Just n
 

@@ -22,7 +22,7 @@ main = runLua $ do
 concat' :: B.ByteString -> B.ByteString -> Lua B.ByteString
 concat' s1 s2 = return $ s1 <> s2
 
-pow :: Double -> Double -> Lua Double
+pow :: LuaNumber -> LuaNumber -> Lua LuaNumber
 pow d1 d2 = return $ d1 ** d2
 
 helloWorld :: Lua B.ByteString

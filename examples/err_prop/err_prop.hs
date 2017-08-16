@@ -72,7 +72,7 @@ failWhenZero = do
       getglobal "fail_when_zero"
       pushinteger (i - 1)
       ret <- pcall 1 1 Nothing
-      if ret /= LuaOK
+      if ret /= OK
         then
           -- propagate the error. no need to push error message since it's
           -- already at the top of the stack at this point. (because of how
