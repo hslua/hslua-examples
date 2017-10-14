@@ -33,23 +33,23 @@ executable lua-version
   main-is:              lua-version.hs
   hs-source-dirs:       examples/lua-version
   build-depends:        base
-                      , hslua >= 0.7 && < 0.9
+                      , hslua >= 0.7 && < 0.10
 
 executable callbacks
   main-is:              callbacks.hs
   hs-source-dirs:       examples/callbacks
   build-depends:        base
                       , bytestring
-                      , hslua >= 0.7 && < 0.9
+                      , hslua >= 0.7 && < 0.10
 
 executable haskellfun
   main-is:              haskellfun.hs
   hs-source-dirs:       examples/haskellfun
   build-depends:        base, bytestring
-                      , hslua >= 0.7 && < 0.9
+                      , hslua >= 0.7 && < 0.10
 
 executable err_prop
   main-is:              err_prop.hs
   hs-source-dirs:       examples/err_prop
   build-depends:        base, bytestring
-                      , hslua >= 0.7 && < 0.9
+                      , hslua >= 0.7 && < 0.10
