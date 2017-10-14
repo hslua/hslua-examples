@@ -4,8 +4,8 @@
 -- to Lua and getting Lua callbacks from Haskell.
 
 import qualified Data.ByteString.Char8 as BC
+import Control.Monad (void)
 import Data.IORef
-import Foreign.C.Types (CInt)
 import Foreign.Lua
 
 main :: IO ()
@@ -16,8 +16,7 @@ main = do
     registerHaskellFunction "addLuaCallbacks" (addLuaCallbacks callbacks)
     registerHaskellFunction "callLuaCallbacks" (callLuaCallbacks callbacks)
     registerHaskellFunction "resetLuaCallbacks" (resetLuaCallbacks callbacks)
-    loadfile "examples/callbacks/callbacks.lua"
-    call 0 0
+    void $ dofile "examples/callbacks/callbacks.lua"
 
 type LuaFunRef = Int
 
@@ -55,8 +54,8 @@ addLuaCallbacks cs = do
         else return $ Just n
 
     addCallbacks :: StackIndex -> StackIndex -> Lua ()
-    addCallbacks n max
-      | n > max = return ()
+    addCallbacks n maxIdx
+      | n > maxIdx = return ()
       | otherwise = do
           -- move nth argument to top of the stack
           pushvalue n
@@ -65,7 +64,7 @@ addLuaCallbacks cs = do
           -- add registry index to IORef
           liftIO $ modifyIORef cs (++ [refId])
           -- continue adding other arguments
-          addCallbacks (n+1) max
+          addCallbacks (n+1) maxIdx
 
 -- | Call Lua callbacks collected with `addLuaCallbacks`.
 callLuaCallbacks :: IORef [LuaFunRef] -> Lua NumResults
@@ -84,9 +83,9 @@ callLuaCallbacks cs = do
     pushinteger (fromIntegral c)
     gettable registryindex
     -- call the callback
-    pcall 0 1 Nothing
+    call 0 1
     -- call table.insert
-    pcall 2 0 Nothing
+    call 2 0
     iter rest
 
 -- | Reset callback queue and remove Lua functions from registry to enable
