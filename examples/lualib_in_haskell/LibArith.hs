@@ -1,14 +1,14 @@
 module LibArith where
 
-import Foreign.C.Types (CInt(CInt))
-import Foreign.Lua
+import Foreign.C.Types (CInt (CInt))
+import Foreign.Lua as Lua
 
 foreign export ccall
-  add :: LuaState -> IO NumResults
+  add :: Lua.State -> IO NumResults
 
-add :: LuaState -> IO NumResults
-add l = runLuaWith l $ do
+add :: Lua.State -> IO NumResults
+add l = runWith l $ do
   i1 <- peek 1
   i2 <- peek 2
-  push (i1 + i2 :: LuaNumber)
+  push (i1 + i2 :: Lua.Number)
   return 1

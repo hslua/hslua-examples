@@ -5,7 +5,7 @@ libarith.so: LibArith.hs
 
 lualibhelper.so: libarith.so libarithhelper.c
 	stack ghc -- libarithhelper.c -no-hs-main -o $@ -shared -fPIC -dynamic \
-		-L. -larith -I/usr/include/lua5.1
+		-L. -larith -I/usr/include/lua5.3
 
 clean:
 	rm -f *.hi

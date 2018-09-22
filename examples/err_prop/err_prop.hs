@@ -10,10 +10,10 @@
 --   Program
 --
 -- And then the function at the top throws an error, according to the error
--- conventions described in the docs. Error is propagated to the program at the
--- bottom.
+-- conventions described in the docs. The error is propagated to the program at
+-- the bottom.
 --
--- Then same thing happens, starting with Haskell function:
+-- Then the same thing happens, starting with Haskell function:
 --
 --   Haskell function
 --   ...
@@ -23,10 +23,10 @@
 
 import qualified Data.ByteString.Char8 as BC
 import Foreign.C.Types (CInt)
-import Foreign.Lua
+import Foreign.Lua as Lua
 
 main :: IO ()
-main = runLua $ do
+main = run $ do
   openlibs
   registerHaskellFunction "fail_when_zero_haskell" failWhenZero
 
@@ -40,9 +40,9 @@ main = runLua $ do
   -- Since Lua function will be the one that propagates error to the program,
   -- we need to catch it using `pcall`
   ret <- pcall 1 1 Nothing
-  errMsg <- tostring 1
-  liftIO $ putStrLn $ "ret: " ++ show ret -- TODO: Implement pcall return values as a type
-  liftIO $ putStrLn $ "errMsg: " ++ BC.unpack errMsg
+  errMsg <- peek 1
+  liftIO $ putStrLn $ "ret: " ++ show ret
+  liftIO $ putStrLn $ "errMsg: " ++ errMsg
 
   top <- gettop
   liftIO $ putStrLn $ "top: " ++ show top
@@ -58,16 +58,16 @@ main = runLua $ do
   call 1 2
   -- We know it failed, so just read the error message without checking first
   -- argument
-  errMsg <- tostring 2
-  liftIO $ putStrLn $ "errMsg: " ++ BC.unpack errMsg
+  errMsg <- peek 2
+  liftIO $ putStrLn $ "errMsg: " ++ errMsg
   pop 2
 
 failWhenZero :: Lua NumResults
 failWhenZero = do
-  i <- tointeger 1
+  i <- peek 1 :: Lua Lua.Integer
   liftIO $ putStrLn $ "Haskell: " ++ show i
   if i == 0
-    then pushstring "Failing from Haskell" >> fmap fromIntegral lerror
+    then pushstring "Failing from Haskell" *> Lua.error
     else do
       getglobal "fail_when_zero"
       pushinteger (i - 1)
@@ -77,7 +77,7 @@ failWhenZero = do
           -- propagate the error. no need to push error message since it's
           -- already at the top of the stack at this point. (because of how
           -- `pcall` works)
-          fmap fromIntegral lerror
+          Lua.error
         else
           -- Lua function's return value is on the stack, return it
           return 1

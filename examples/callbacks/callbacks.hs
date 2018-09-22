@@ -11,14 +11,14 @@ import Foreign.Lua
 main :: IO ()
 main = do
   callbacks <- newIORef []
-  runLua $ do
+  run $ do
     openlibs
     registerHaskellFunction "addLuaCallbacks" (addLuaCallbacks callbacks)
     registerHaskellFunction "callLuaCallbacks" (callLuaCallbacks callbacks)
     registerHaskellFunction "resetLuaCallbacks" (resetLuaCallbacks callbacks)
     void $ dofile "examples/callbacks/callbacks.lua"
 
-type LuaFunRef = Int
+type LuaFunRef = Reference
 
 -- | Get Lua callbacks as argument to later call them in order.
 -- Successive calls to this function without calling `resetLuaCallbacks`
@@ -80,8 +80,7 @@ callLuaCallbacks cs = do
   iter (c : rest) = do
     getglobal' "table.insert"
     pushvalue (-2)
-    pushinteger (fromIntegral c)
-    gettable registryindex
+    getref registryindex c
     -- call the callback
     call 0 1
     -- call table.insert
