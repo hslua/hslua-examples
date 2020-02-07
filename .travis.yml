@@ -36,5 +36,5 @@ script:
   - stack exec lua-version
   - stack exec callbacks
   - stack exec haskellfun
-  - stack exec err_prop
-  - (cd examples/lualib_in_haskell && make clean && make && LD_LIBRARY_PATH=. lua main.lua)
+  # - stack exec err_prop
+  # - (cd examples/lualib_in_haskell && make clean && make && LD_LIBRARY_PATH=. lua main.lua)
