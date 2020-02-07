@@ -25,8 +25,7 @@ before_install:
 install:
   - echo "$(ghc --version) [$(ghc --print-project-git-commit-id 2> /dev/null || echo '?')]"
   - ulimit -n 4096
-  - stack --no-terminal --install-ghc build --flag hslua:lua501 --flag hslua:use-pkgconfig
-
+  - stack --no-terminal --install-ghc build
 script:
   - stack exec lua-version
   - stack exec callbacks
