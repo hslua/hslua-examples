@@ -1,31 +1,37 @@
-sudo: false
+dist: bionic
 language: generic
 
 # Speed builds up by caching install requirements
 cache:
   directories:
-  - $HOME/.stack
+    - "$HOME/.stack"
+    - "$TRAVIS_BUILD_DIR/.stack-work"
 
 addons:
   apt:
-    packages:
-      - lua5.1
-      - liblua5.1-0
-      - liblua5.1-0-dev
-      - ghc-8.0.2
     sources:
-      - hvr-ghc
+      - sourceline: 'ppa:hvr/ghc'
+    packages:
+      - lua5.3
+      - liblua5.3-0
+      - liblua5.3-dev
+      - ghc-8.6.5
 
 before_install:
   - export PATH=/opt/ghc/$GHCVER/bin:/opt/cabal/$CABALVER/bin:$PATH
-# Download and unpack the stack executable
-  - mkdir -p ~/.local/bin
-  - curl -L https://www.stackage.org/stack/linux-x86_64 | tar xz --wildcards --strip-components=1 -C ~/.local/bin '*/stack'
+  # Download and unpack the stack executable
+  - curl -sSL https://get.haskellstack.org/ | sh
+  - stack --version
 
 install:
   - echo "$(ghc --version) [$(ghc --print-project-git-commit-id 2> /dev/null || echo '?')]"
   - ulimit -n 4096
-  - stack --no-terminal --install-ghc build
+  - |
+    stack --no-terminal --install-ghc build \
+          --flag hslua:hardcode-reg-keys \
+          --flag hslua:pkg-config \
+          --flag hslua:system-lua
+
 script:
   - stack exec lua-version
   - stack exec callbacks

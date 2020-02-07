@@ -1,7 +1,7 @@
 ALL: libarith.so lualibhelper.so
 
 libarith.so: LibArith.hs
-	stack ghc -- $^ -o $@ -shared -fPIC -dynamic -lHSrts-ghc8.0.2
+	stack ghc -- $^ -o $@ -shared -fPIC -dynamic -lHSrts-ghc8.6.5
 
 lualibhelper.so: libarith.so libarithhelper.c
 	stack ghc -- libarithhelper.c -no-hs-main -o $@ -shared -fPIC -dynamic \
