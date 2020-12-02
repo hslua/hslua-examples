@@ -1,7 +1,10 @@
 hslua examples
 ==============
 
-[![Build Status]](https://travis-ci.org/hslua/hslua-examples)
+[![Build status][GitHub Actions badge]][GitHub Actions]
+
+[GitHub Actions badge]: https://img.shields.io/github/workflow/status/hslua/hslua-examples/CI.svg?logo=github
+[GitHub Actions]: https://github.com/hslua/hslua-examples/actions
 
 
 Using the Lua interface for Haskell
@@ -16,4 +19,3 @@ these examples with hslua that uses system-wide LuaJIT like this:
 cabal install hslua-examples --constraint="hslua +system-lua +luajit"
 ```
 
-[Build Status]: https://travis-ci.org/hslua/hslua-examples.svg?branch=master
