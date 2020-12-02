@@ -31,11 +31,20 @@ jobs:
                 --flag hslua:pkg-config \
                 --flag hslua:system-lua
 
-      - name: Test Haskell binaries
+      - name: Run example "lua-version"
         run: |
           stack exec lua-version
+
+      - name: Run example "callbacks"
+        run: |
           stack exec callbacks
+
+      - name: Run example "haskellfun"
+        run: |
           stack exec haskellfun
+
+      - name: Run example "err_prop"
+        run: |
           stack exec err_prop
 
       - name: Test dynamical Haskell library

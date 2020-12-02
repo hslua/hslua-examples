@@ -1,5 +1,7 @@
 flags: {}
 packages:
   - '.'
+extra-deps:
+  - hslua-1.3.0
 resolver: lts-16.24
 
