@@ -1,4 +1,4 @@
-hslua examples
+HsLua examples
 ==============
 
 [![Build status][GitHub Actions badge]][GitHub Actions]
@@ -6,16 +6,24 @@ hslua examples
 [GitHub Actions badge]: https://img.shields.io/github/workflow/status/hslua/hslua-examples/CI.svg?logo=github
 [GitHub Actions]: https://github.com/hslua/hslua-examples/actions
 
+The following examples are available:
 
-Using the Lua interface for Haskell
------------------------------------
+- **lua-version**: A simple program which uses Lua library functions and
+  Lua variables to print the Lua version against which the program was
+  linked.
 
-To use system-wide installed Lua/LuaJIT when linking hslua as a dependency,
-build/install your package using `--constraint="hslua +system-lua"` or for
-LuaJIT: `--constraint="hslua +system-lua +luajit"`. For example, you can install
-these examples with hslua that uses system-wide LuaJIT like this:
+- **haskellfun**: Demo how functions written in Haskell can be exposed
+  to Lua. Includes a short Lua script which makes use of these
+  functions.
 
-```
-cabal install hslua-examples --constraint="hslua +system-lua +luajit"
-```
+- **callbacks**: Program that demonstrates how Haskell callbacks can be
+  passed to Lua, and how Lua callbacks can be collected and called from
+  Haskell.
 
+- **err_prop**: Demonstrates how errors propagate in HsLua programs.
+  This consists of two parts: the Haskell program, and a short Lua
+  script.
+
+- **lualib_in_haskell**: Lua can make use of dynamically loaded
+  libraries. This shows how such a library can be created with HsLua,
+  exposing functions written in Haskell to Lua.
