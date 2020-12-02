@@ -55,10 +55,10 @@ main = run $ do
   -- it's never safe(it's not even exported by the library for this reason).
   -- So if we're calling a Haskell function that `pcall` and `call` does the
   -- same thing.
-  call 1 2
-  -- We know it failed, so just read the error message without checking first
-  -- argument
-  errMsg <- peek 2
+  _ <- pcall 1 2 Nothing
+  -- We know it failed, so just read the error message without checking
+  -- first argument
+  errMsg <- peek 1
   liftIO $ putStrLn $ "errMsg: " ++ errMsg
   pop 2
 
