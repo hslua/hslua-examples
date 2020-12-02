@@ -1,0 +1,42 @@
+name: CI
+
+# Trigger the workflow on push or pull request, but only for the
+# master branch
+on:
+  pull_request:
+  push:
+
+jobs:
+  examples:
+    name: Run examples
+    runs-on: ubuntu-18.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Install Lua shared library
+        run: |
+          sudo apt install lua5.3 liblua5.3-0 liblua5.3-dev
+          sudo ln -s /usr/bin/lua5.3 /usr/bin/lua
+
+      - name: Setup stack
+        run: |
+          stack update
+          stack setup
+
+      - name: Build
+        run: |
+          stack build \
+                --flag hslua:hardcode-reg-keys \
+                --flag hslua:pkg-config \
+                --flag hslua:system-lua
+
+      - name: Test Haskell binaries
+        run: |
+          stack exec lua-version
+          stack exec callbacks
+          stack exec haskellfun
+          stack exec err_prop
+
+      - name: Test dynamical Haskell library
+        run: make -C examples/lualib_in_haskell clean run
