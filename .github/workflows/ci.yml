@@ -47,5 +47,9 @@ jobs:
         run: |
           stack exec err_prop
 
+      - name: Run example "wishlist"
+        run: |
+          stack exec wishlist -- examples/wishlist/filter.lua
+
       - name: Test dynamical Haskell library
         run: make -C examples/lualib_in_haskell clean run

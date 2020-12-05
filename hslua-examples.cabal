@@ -35,6 +35,12 @@ executable lua-version
   build-depends:        base
                       , hslua >= 1.0 && < 1.4
 
+executable wishlist
+  main-is:              wishlist.hs
+  hs-source-dirs:       examples/wishlist
+  build-depends:        base, bytestring, text
+                      , hslua >= 1.0 && < 1.4
+
 executable callbacks
   main-is:              callbacks.hs
   hs-source-dirs:       examples/callbacks
