@@ -1,10 +1,8 @@
 HsLua examples
 ==============
 
-[![Build status][GitHub Actions badge]][GitHub Actions]
-
-[GitHub Actions badge]: https://img.shields.io/github/workflow/status/hslua/hslua-examples/CI.svg?logo=github
-[GitHub Actions]: https://github.com/hslua/hslua-examples/actions
+**This repository has been archived. See the `hslua-examples` folder in the
+main hslua repo for up-to-date examples.**
 
 The following examples are available:
 
